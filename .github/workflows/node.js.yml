@@ -27,7 +27,7 @@ jobs:
 
       # Step 4: Build Angular application
       - name: Build Angular app
-        run: ng build --configuration production
+        run: ng run build --prod
 
       # Step 5: Deploy to AWS EC2 via SSH
       - name: Copy files to EC2 instance
