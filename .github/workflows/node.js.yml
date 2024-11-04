@@ -35,7 +35,8 @@ jobs:
         with:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USERNAME }}
-          key: ${{ secrets.KEY_GITHUB_ACTION }}
+          key: ${{ secrets.AWS_SSH_KEY }}
+#          key: ${{ secrets.KEY_GITHUB_ACTION }}
           source: "dist/*"
           target: "/var/www/devOps-formation/"
 
@@ -45,5 +46,6 @@ jobs:
         with:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USERNAME }}
-          key: ${{ secrets.KEY_GITHUB_ACTION }}
+          key: ${{ secrets.AWS_SSH_KEY }}
+#          key: ${{ secrets.KEY_GITHUB_ACTION }}
           script: "sudo systemctl restart nginx"
