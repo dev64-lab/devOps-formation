@@ -31,7 +31,7 @@ jobs:
 
       # Step 5: Deploy to AWS EC2 via SSH
       - name: Copy files to EC2 instance
-        uses: appleboy/scp-action@v0.0.6
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USERNAME }}
@@ -42,7 +42,7 @@ jobs:
 
       # Step 6: Restart Nginx on EC2
       - name: Restart Nginx
-        uses: appleboy/ssh-action@v0.1.6
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USERNAME }}
