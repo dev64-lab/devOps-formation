@@ -39,6 +39,9 @@ jobs:
 #          key: ${{ secrets.KEY_GITHUB_ACTION }}
           source: "dist/*"
           target: "/var/www/devOps-formation/"
+          ssh_key_option:
+            - "-o StrictHostKeyChecking=no"
+            - "-o UserKnownHostsFile=/dev/null"
 
       # Step 6: Restart Nginx on EC2
       - name: Restart Nginx
