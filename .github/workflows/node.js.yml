@@ -1,7 +1,4 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Node.js CI
+name: Angular CI/CD with AWS EC2
 
 on:
   push:
@@ -10,22 +7,43 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  deploy:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+      # Step 1: Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 4: Build Angular application
+      - name: Build Angular app
+        run: ng build --configuration production
+
+      # Step 5: Deploy to AWS EC2 via SSH
+      - name: Copy files to EC2 instance
+        uses: appleboy/scp-action@v0.0.6
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.KEY_GITHUB_ACTION }}
+          source: "dist/devOps-formation/*"
+          target: "/var/www/devOps-formation/"
+
+      # Step 6: Restart Nginx on EC2
+      - name: Restart Nginx
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.KEY_GITHUB_ACTION }}
+          script: "sudo systemctl restart nginx"
