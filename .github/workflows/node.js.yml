@@ -36,7 +36,7 @@ jobs:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.KEY_GITHUB_ACTION }}
-          source: "dist/devOps-formation/*"
+          source: "dist/*"
           target: "/var/www/devOps-formation/"
 
       # Step 6: Restart Nginx on EC2
